@@ -5,22 +5,29 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Finca } from './finca/finca.entity';
 import { Productor } from './productor/productor.entity';
 import { ProductoControl, ProductoControlType } from './productoControl/productoControl.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'aws-0-us-west-1.pooler.supabase.com',
-      port: 6543,
-      username: 'postgres.ipctzjexgexsxjdravya',
-      password: '#5D!Yr2DnnQXXny',
-      database: 'postgres',
-      synchronize: true, // solo para desarrollo
-      // entities: [User],
-      ssl: {
-        rejectUnauthorized: false,
-      },
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
+    TypeOrmModule.forRoot({
+      type: (process.env.DB_TYPE || 'postgres') as any,
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      username: process.env.DB_USERNAME || 'postgres',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_DATABASE || 'postgres',
+      synchronize: process.env.DB_SYNC === 'true',
+      entities: [Finca, Productor, ProductoControl, ProductoControlType],
+      ssl: {
+        rejectUnauthorized: false
+      },
+      logging: ['error', 'warn'],
+      autoLoadEntities: true,
+    }),
+    TypeOrmModule.forFeature([Finca, Productor, ProductoControl, ProductoControlType]),
   ],
   controllers: [AppController],
   providers: [AppService],
