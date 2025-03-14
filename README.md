@@ -11,3 +11,8 @@ Tercer paso:
 
 Cuarto paso:
 ```npm run start:dev```
+
+
+## Para correr tests
+
+```npm test```
