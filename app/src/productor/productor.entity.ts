@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 import { IsNotEmpty, IsEmail, IsPhoneNumber } from 'class-validator';
 import { Finca } from '../finca/finca.entity';
